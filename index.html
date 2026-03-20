@@ -19,10 +19,11 @@
     .stat.building strong { color: #ffd08a; }
     .stat.exploration strong { color: #90fff2; }
     .command-center { margin: 0 0 18px; padding: 18px; border: 1px solid var(--line); border-radius: 22px; background: linear-gradient(180deg, rgba(255,255,255,0.035), rgba(255,255,255,0.018)), rgba(7, 12, 22, 0.88); box-shadow: 0 18px 44px rgba(0, 0, 0, 0.24); display: grid; gap: 14px; }
-    .command-center-head { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 18px; align-items: start; }
+    .command-center-head { display: flex; flex-wrap: wrap; gap: 18px 24px; align-items: start; justify-content: space-between; }
+    .command-copy { flex: 1 1 440px; min-width: 0; max-width: 72ch; }
     .command-center h2 { font-size: clamp(1.2rem, 2vw, 1.6rem); }
     .command-center p { max-width: 70ch; }
-    .command-actions { display: flex; flex-wrap: wrap; justify-content: flex-end; gap: 10px; }
+    .command-actions { flex: 1 1 620px; display: flex; flex-wrap: wrap; justify-content: flex-end; gap: 10px; }
     .command-status { padding: 12px 14px; border-radius: 16px; border: 1px solid rgba(255,255,255,0.08); background: rgba(255,255,255,0.03); color: var(--muted); font-size: 0.95rem; }
     .command-hint { font-size: 0.9rem; color: var(--muted); }
     .queue-panel { display: grid; gap: 10px; padding: 14px; border-radius: 18px; border: 1px solid rgba(255,255,255,0.08); background: rgba(255,255,255,0.025); }
@@ -96,7 +97,7 @@
     .edit-button:hover { border-color: rgba(160, 222, 255, 0.28); background: rgba(255,255,255,0.08); }
     .card.is-dirty { box-shadow: 0 0 0 1px rgba(144,255,240,0.22), 0 16px 40px rgba(0, 0, 0, 0.28); }
     .card.is-queued { box-shadow: 0 0 0 1px rgba(255, 208, 138, 0.24), 0 16px 40px rgba(0, 0, 0, 0.28); }
-    @media (max-width: 900px) { .command-center-head { grid-template-columns: 1fr; } .command-actions { justify-content: flex-start; } }
+    @media (max-width: 900px) { .command-center-head { display: grid; grid-template-columns: 1fr; } .command-actions { justify-content: flex-start; } }
     @media (max-width: 720px) { .toolbar { grid-template-columns: 1fr; } main { padding-inline: 14px; } .theme-section { padding: 16px; } .grid { grid-template-columns: 1fr; } }
   </style>
 </head>
@@ -114,7 +115,7 @@
     </div>
     <section class="command-center">
       <div class="command-center-head">
-        <div>
+        <div class="command-copy">
           <h2>Command Center</h2>
           <p>Edit descriptions and prompts inline on each badge card. For demos, everything here runs in the browser with images served from GitHub Pages. If you want to bring changes back into production assets later, export or save updated <code>manifest.json</code> and <code>center-image-prompts.csv</code>.</p>
         </div>
