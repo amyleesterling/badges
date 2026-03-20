@@ -87,6 +87,9 @@
     .inline-field { display: grid; gap: 6px; }
     .inline-field label { font-size: 0.72rem; font-weight: 700; letter-spacing: 0.16em; text-transform: uppercase; color: #83dfff; }
     .field-input { width: 100%; padding: 11px 12px; border-radius: 14px; border: 1px solid rgba(160, 222, 255, 0.14); background: rgba(255,255,255,0.04); color: var(--text); font: inherit; line-height: 1.45; resize: vertical; }
+    .prompt-main { padding-top: 10px; border-top: 1px solid rgba(255,255,255,0.06); }
+    .prompt-main summary { cursor: pointer; font-size: 0.78rem; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: #9fe9ff; }
+    .prompt-main .inline-field { margin-top: 10px; }
     .prompt-block { padding-top: 10px; border-top: 1px solid rgba(255,255,255,0.06); }
     .prompt-block summary { cursor: pointer; font-size: 0.78rem; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: #9fe9ff; }
     .prompt-block .inline-field { margin-top: 10px; }
@@ -8442,13 +8445,13 @@
       return entry.centerArtReady ? "Center art linked" : "Using placeholder";
     }
 
-    function imageSourceText(entry) {
-      if (entry.manualImageFile) return `Manual draft: ${entry.manualImageFile.name}`;
-      if (entry.selectedPreviewHref && entry.selectedPreviewHref !== entry.centerArtPreviewHref) return `Previewing: ${entry.selectedPreviewLabel || "alternate render"}`;
-      if (entry.imageSource === "manual") {
-        return entry.manualImageSourceName ? `Manual override: ${entry.manualImageSourceName}` : "Manual override";
+    function badgeFilenameText(entry) {
+      const sourcePath = entry.expectedCenterArtDiskPath || entry.centerArtDiskPath || "";
+      if (sourcePath) {
+        const parts = sourcePath.split("/");
+        return parts[parts.length - 1] || sourcePath;
       }
-      return entry.centerArtReady ? "Prompt generated" : "No image yet";
+      return `${entry.slug}.png`;
     }
 
     function imageNoteText(entry) {
@@ -8463,8 +8466,8 @@
       cardMap = new Map(cards.map((card) => [card.dataset.key, card]));
     }
 
-    function collapseAdvancedPromptBlocks() {
-      document.querySelectorAll(".prompt-block").forEach((block) => {
+    function collapsePromptBlocks() {
+      document.querySelectorAll(".prompt-main, .prompt-block").forEach((block) => {
         block.open = false;
       });
     }
@@ -8502,10 +8505,10 @@
         '<div class="meta-block"><span>Title</span><strong>' + escapeHtmlText(entry.title) + '</strong></div>',
         '<div class="meta-block"><span>Name</span><p>' + escapeHtmlText(entry.item) + '</p></div>',
         '<div class="meta-block"><span>Center Art</span><p class="js-center-art-status">' + escapeHtmlText(centerArtStatusLabel(entry)) + '</p></div>',
-        '<div class="meta-block"><span>Image Source</span><p class="js-image-source-label">' + escapeHtmlText(imageSourceText(entry)) + '</p></div>',
+        '<div class="meta-block"><span>Badge Filename</span><p class="js-image-source-label">' + escapeHtmlText(badgeFilenameText(entry)) + '</p></div>',
         '<div class="js-variant-region">' + alternateRenderMarkupForEntry(entry) + '</div>',
         '<div class="inline-field"><label>Description</label><textarea class="field-input js-description-input" data-key="' + escapeHtmlText(key) + '" data-field="description" rows="3">' + escapeHtmlText(entry.description) + '</textarea></div>',
-        '<div class="inline-field"><label>Prompt</label><textarea class="field-input js-rich-prompt-input" data-key="' + escapeHtmlText(key) + '" data-field="richImagePrompt" rows="9">' + escapeHtmlText(entry.richImagePrompt) + '</textarea></div>',
+        '<details class="prompt-main"><summary>Prompt Source Text</summary><div class="inline-field"><label>Prompt</label><textarea class="field-input js-rich-prompt-input" data-key="' + escapeHtmlText(key) + '" data-field="richImagePrompt" rows="9">' + escapeHtmlText(entry.richImagePrompt) + '</textarea></div></details>',
         '<details class="prompt-block"><summary>Advanced Prompt Fields</summary>',
         '<div class="inline-field"><label>Short Prompt</label><textarea class="field-input js-short-prompt-input" data-key="' + escapeHtmlText(key) + '" data-field="shortImagePrompt" rows="3">' + escapeHtmlText(entry.shortImagePrompt) + '</textarea></div>',
         '<div class="inline-field"><label>Negative Prompt</label><textarea class="field-input js-negative-prompt-input" data-key="' + escapeHtmlText(key) + '" data-field="negativeImagePrompt" rows="4">' + escapeHtmlText(entry.negativeImagePrompt) + '</textarea></div>',
@@ -8543,7 +8546,7 @@
         .map((entry) => cardMarkup(entry))
         .join("");
       grid.innerHTML = markup;
-      collapseAdvancedPromptBlocks();
+      collapsePromptBlocks();
       refreshCardsCollection();
       wireCardInteractions(grid);
       for (const entry of badgeEntries.filter((item) => item.theme === theme)) applyEntryToCard(entry);
@@ -8614,7 +8617,7 @@
       if (artFrame) artFrame.innerHTML = artMarkupForEntry(entry);
       if (variantRegion) variantRegion.innerHTML = alternateRenderMarkupForEntry(entry);
       if (centerArtStatus) centerArtStatus.textContent = centerArtStatusLabel(entry);
-      if (imageSource) imageSource.textContent = imageSourceText(entry);
+      if (imageSource) imageSource.textContent = badgeFilenameText(entry);
       if (imageNote) imageNote.textContent = imageNoteText(entry);
       if (imagePath) imagePath.textContent = entry.expectedCenterArtDiskPath || entry.centerArtDiskPath || "";
       wireCardInteractions(card);
@@ -9295,13 +9298,14 @@
 
     syncThemeOrdering();
     updateThemeSummaries();
+    renderTheme("building");
+    renderTheme("exploration");
     wireCardInteractions();
-    collapseAdvancedPromptBlocks();
+    collapsePromptBlocks();
     hydrateSavedEntries();
     hydrateDraftFromStorage();
     hydrateSavedQueue();
     renderImageRerunQueue();
-    for (const entry of badgeEntries) applyEntryToCard(entry);
     applyFilter();
     updateCommandStatus();
   </script>
