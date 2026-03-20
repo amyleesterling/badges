@@ -1,0 +1,39 @@
+{
+  "generatedAt": "2026-03-16T12:01:01.2187167-04:00",
+  "pendingSiteUpdates": [
+    {
+      "key": "building:battery",
+      "theme": "building",
+      "sequence": 1,
+      "slug": "battery",
+      "title": "Battery",
+      "savedAt": "2026-03-16T12:01:01.2187167-04:00",
+      "changedFields": [
+        "title",
+        "description",
+        "image"
+      ],
+      "updateTargets": [
+        "description",
+        "image"
+      ]
+    },
+    {
+      "key": "building:glue-bottle",
+      "theme": "building",
+      "sequence": 4,
+      "slug": "glue-bottle",
+      "title": "Glue Bottle",
+      "savedAt": "2026-03-16T12:01:01.2187167-04:00",
+      "changedFields": [
+        "title",
+        "description",
+        "image"
+      ],
+      "updateTargets": [
+        "description",
+        "image"
+      ]
+    }
+  ]
+}
