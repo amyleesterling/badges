@@ -104,7 +104,7 @@
   <main>
     <section class="intro">
       <h1>Pyr Badge Editor</h1>
-      <p>Every badge is shown as editable content: center art, title, description, and prompt fields. Use the cards directly, then save the updated manifest and CSV back into the local <code>pyr</code> folder.</p>
+      <p>Every badge is shown as editable content: center art, title, description, and prompt fields. All preview images load directly from this site, so the editor works on any machine for demos. Local folder access is only needed if you want to write files back into a working <code>pyr</code> folder.</p>
     </section>
     <div class="hero">
       <div class="stat"><strong id="stat-total-badges">200</strong><span>Total badges</span></div>
@@ -116,18 +116,18 @@
       <div class="command-center-head">
         <div>
           <h2>Command Center</h2>
-          <p>Edit descriptions and prompts inline on each badge card. Saving writes your current text back to <code>manifest.json</code> and <code>center-image-prompts.csv</code> so the pipeline can use it immediately.</p>
+          <p>Edit descriptions and prompts inline on each badge card. For demos, everything here runs in the browser with images served from GitHub Pages. If you want to bring changes back into production assets later, export or save updated <code>manifest.json</code> and <code>center-image-prompts.csv</code>.</p>
         </div>
         <div class="command-actions">
-          <button id="pick-output-root" class="action-button accent" type="button">Pick Pyr Folder</button>
+          <button id="pick-output-root" class="action-button accent" type="button">Pick Local Pyr Folder</button>
           <button id="save-edits" class="action-button primary" type="button" disabled>Save All Changes + Images</button>
           <button id="download-manifest" class="action-button" type="button">Download Manifest</button>
           <button id="download-csv" class="action-button" type="button">Download CSV</button>
           <button id="copy-rebuild-command" class="action-button" type="button">Copy Rebuild Command</button>
         </div>
       </div>
-      <p id="command-status" class="command-status">No draft edits yet. Pick the static/badges/pyr folder to save directly from the browser, or use the download buttons for manual export.</p>
-      <p class="command-hint">Direct saves update <code>manifest.json</code> and <code>center-image-prompts.csv</code>. If you want regenerated SVG shells after editing, rerun <code>node research/generate-pyr-badges-v2.mjs</code>.</p>
+      <p id="command-status" class="command-status">Demo-ready: all badge images on this page are served from GitHub Pages. Pick a local <code>pyr</code> folder only if you want to save files back to disk; otherwise use the download buttons for export.</p>
+      <p class="command-hint">Direct saves update <code>manifest.json</code> and <code>center-image-prompts.csv</code>. For a browser-only demo on another machine, no local asset folder is required.</p>
       <section class="queue-panel">
         <div class="queue-head">
           <div>

@@ -6,6 +6,10 @@ Live site:
 
 - https://amyleesterling.github.io/badges/
 
+Demo note:
+
+- The live site already includes the badge images from this repo, so you can present it from your Mac without copying a local asset folder first.
+
 What it does:
 
 - Browse all Pyr badges in one editor.
