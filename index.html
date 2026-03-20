@@ -21,6 +21,16 @@
     .command-center { margin: 0 0 18px; padding: 18px; border: 1px solid var(--line); border-radius: 22px; background: linear-gradient(180deg, rgba(255,255,255,0.035), rgba(255,255,255,0.018)), rgba(7, 12, 22, 0.88); box-shadow: 0 18px 44px rgba(0, 0, 0, 0.24); display: grid; gap: 14px; }
     .command-center-head { display: flex; flex-wrap: wrap; gap: 18px 24px; align-items: start; justify-content: space-between; }
     .command-copy { flex: 1 1 440px; min-width: 0; max-width: 72ch; }
+    .command-copy-head { display: flex; align-items: center; gap: 18px; margin-bottom: 12px; }
+    .command-badge { position: relative; flex: 0 0 92px; width: 92px; aspect-ratio: 1; border-radius: 28px; overflow: hidden; border: 1px solid rgba(160, 222, 255, 0.22); background:
+      radial-gradient(circle at 30% 20%, rgba(99, 255, 231, 0.24), transparent 36%),
+      radial-gradient(circle at 70% 80%, rgba(200, 116, 255, 0.28), transparent 42%),
+      rgba(255,255,255,0.04);
+      box-shadow: 0 18px 42px rgba(0, 0, 0, 0.34);
+    }
+    .command-badge::after { content: ""; position: absolute; inset: 10px; border-radius: 20px; border: 1px solid rgba(255,255,255,0.08); pointer-events: none; }
+    .command-badge img { width: 100%; height: 100%; object-fit: contain; padding: 10px; filter: drop-shadow(0 0 20px rgba(88, 224, 255, 0.35)); }
+    .command-kicker { display: inline-flex; margin-bottom: 8px; padding: 6px 10px; border-radius: 999px; border: 1px solid rgba(160, 222, 255, 0.18); background: rgba(160, 222, 255, 0.08); color: #c8f5ff; font-size: 0.78rem; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; }
     .command-center h2 { font-size: clamp(1.2rem, 2vw, 1.6rem); }
     .command-center p { max-width: 70ch; }
     .command-actions { flex: 1 1 620px; display: flex; flex-wrap: wrap; justify-content: flex-end; gap: 10px; }
@@ -98,6 +108,7 @@
     .card.is-dirty { box-shadow: 0 0 0 1px rgba(144,255,240,0.22), 0 16px 40px rgba(0, 0, 0, 0.28); }
     .card.is-queued { box-shadow: 0 0 0 1px rgba(255, 208, 138, 0.24), 0 16px 40px rgba(0, 0, 0, 0.28); }
     @media (max-width: 900px) { .command-center-head { display: grid; grid-template-columns: 1fr; } .command-actions { justify-content: flex-start; } }
+    @media (max-width: 640px) { .command-copy-head { align-items: flex-start; } .command-badge { flex-basis: 76px; width: 76px; border-radius: 22px; } }
     @media (max-width: 720px) { .toolbar { grid-template-columns: 1fr; } main { padding-inline: 14px; } .theme-section { padding: 16px; } .grid { grid-template-columns: 1fr; } }
   </style>
 </head>
@@ -116,7 +127,15 @@
     <section class="command-center">
       <div class="command-center-head">
         <div class="command-copy">
-          <h2>Command Center</h2>
+          <div class="command-copy-head">
+            <div class="command-badge">
+              <img src="./center-art/exploration/test-tube.png" alt="Test Tube badge art" loading="lazy" />
+            </div>
+            <div>
+              <div class="command-kicker">Live Badge Ops</div>
+              <h2>Command Center</h2>
+            </div>
+          </div>
           <p>Edit descriptions and prompts inline on each badge card. For demos, everything here runs in the browser with images served from GitHub Pages. If you want to bring changes back into production assets later, export or save updated <code>manifest.json</code> and <code>center-image-prompts.csv</code>.</p>
         </div>
         <div class="command-actions">
@@ -8444,6 +8463,12 @@
       cardMap = new Map(cards.map((card) => [card.dataset.key, card]));
     }
 
+    function collapseAdvancedPromptBlocks() {
+      document.querySelectorAll(".prompt-block").forEach((block) => {
+        block.open = false;
+      });
+    }
+
     function syncThemeOrdering() {
       for (const theme of ["building", "exploration"]) {
         const themeEntries = badgeEntries.filter((entry) => entry.theme === theme);
@@ -8518,6 +8543,7 @@
         .map((entry) => cardMarkup(entry))
         .join("");
       grid.innerHTML = markup;
+      collapseAdvancedPromptBlocks();
       refreshCardsCollection();
       wireCardInteractions(grid);
       for (const entry of badgeEntries.filter((item) => item.theme === theme)) applyEntryToCard(entry);
@@ -9270,6 +9296,7 @@
     syncThemeOrdering();
     updateThemeSummaries();
     wireCardInteractions();
+    collapseAdvancedPromptBlocks();
     hydrateSavedEntries();
     hydrateDraftFromStorage();
     hydrateSavedQueue();
